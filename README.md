@@ -1,6 +1,6 @@
 # pdftool
 
-pdftool provides tools to process PDFs. Many of these tools
+```pdftool``` provides tools to process PDFs. Many of these tools
 are helpful for lawyers that work with PDFs.
 
 ## Installation
