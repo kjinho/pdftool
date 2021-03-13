@@ -7,7 +7,7 @@ are helpful for lawyers that work with PDFs.
 
 ### From Source
 
-    go get -u http://github.com/kjinho/rename-tool
+    go get -u http://github.com/kjinho/pdftool
 
 ## Usage
 
