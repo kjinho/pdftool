@@ -33,47 +33,55 @@ var startNo int64
 
 // batesCmd represents the bates command
 var batesCmd = &cobra.Command{
-	Use:   "bates inFile outFile",
+	Use:   "bates inFile1 ...",
 	Short: "Bates stamp PDF files",
 	Long: `
 bates provides a tool to Bates stamp PDFs. Mandatory arguments are the 
-inFile (input PDF) and the outFile (output PDF).
+list of inFiles (input PDFs) that should be Bates stamped.
 
 Optional flags are available to modify the content of the Bates stamp 
 (e.g., prefix, separator, number width, starting number).
 
-For example,
+For example, given a 10-page PDF infile.pdf,
 
-  $ pdftool bates infile.pdf outfile.pdf -p ABCD -s _ -n 101
+  $ pdftool bates infile.pdf -p ABCD -s _ -n 101
 
-takes infile.pdf and writes a new outfile.pdf with bates numbers
-starting with ABCD_0000000101 on the first page of the PDF.
+takes infile.pdf and writes a new PDF with bates numbers starting with
+ABCD_0000000101 on the first page of the PDF. The output filename will
+be infile-ABCD_0000000101-ABCD_0000000110.pdf.
   `,
-	Args: cobra.ExactArgs(2),
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		_, err := os.Stat(args[0])
-		if err != nil {
-			log.Fatalf("inFile `%s` does not exist", args[0])
+		nargs := len(args)
+		xstartNo := startNo
+		for i := 0; i < nargs; i++ {
+			_, err := os.Stat(args[i])
+			if err != nil {
+				log.Fatalf("inFile `%s` does not exist", args[i])
+			}
+			pageCount, err := api.PageCountFile(args[i])
+			if err != nil {
+				log.Fatalf("error with inFile `%s`: %s", args[i], err)
+			}
+			fmtString := utils.GenerateFmtString(prefix, separator, buffer)
+			startBates := fmt.Sprintf(fmtString, xstartNo)
+			stopBates := fmt.Sprintf(fmtString, xstartNo+int64(pageCount)-1)
+
+			newFilename := generateNewFilename(args[i], "-"+startBates+"-"+stopBates)
+			_, err = os.Stat(newFilename)
+			if !Overwrite && err == nil {
+				log.Fatalf("outFile `%s` already exists. To overwrite, use --force", newFilename)
+			}
+			log.Printf(
+				"Performing bates numbering\nInput:\t%s\nOutput:\t%s\nStart:\t%s\nStop:\t%s\n",
+				args[i],
+				newFilename,
+				startBates,
+				stopBates,
+			)
+			utils.BatesStamp(args[i], newFilename, fmtString, xstartNo)
+			xstartNo += int64(pageCount)
 		}
-		pageCount, err := api.PageCountFile(args[0])
-		if err != nil {
-			log.Fatalf("error with inFile `%s`: %s", args[0], err)
-		}
-		_, err = os.Stat(args[1])
-		if !Overwrite && err == nil {
-			log.Fatalf("outFile `%s` already exists. To overwrite, use --force", args[1])
-		}
-		fmtString := utils.GenerateFmtString(prefix, separator, buffer)
-		startBates := fmt.Sprintf(fmtString, startNo)
-		stopBates := fmt.Sprintf(fmtString, startNo+int64(pageCount)-1)
-		fmt.Printf(
-			"Performing bates numbering\nInput:\t%s\nOutput:\t%s\nStart:\t%s\nStop:\t%s\n",
-			args[0],
-			args[1],
-			startBates,
-			stopBates,
-		)
-		utils.BatesStamp(args[0], args[1], fmtString, startNo)
 	},
 }
 

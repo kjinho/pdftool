@@ -24,39 +24,52 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var filenameSuffix string
+
 // draftCmd represents the draft command
 var draftCmd = &cobra.Command{
-	Use:   "draft inFile outFile",
+	Use:   "draft inFile1 ...",
 	Short: "Add a `DRAFT` watermark",
 	Long: `
-draft adds a "DRAFT" watermark to each page of the PDF.`,
+draft adds a "DRAFT" watermark to each page of the PDF.
+
+By default, the output filename is given the suffix "-DRAFT"`,
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		_, err := os.Stat(args[0])
-		if err != nil {
-			log.Fatalf("inFile `%s` does not exist", args[0])
-		}
-		_, err = api.PageCountFile(args[0])
-		if err != nil {
-			log.Fatalf("error with inFile `%s`: %s", args[0], err)
-		}
-		_, err = os.Stat(args[1])
-		if !Overwrite && err == nil {
-			log.Fatalf("outFile `%s` already exists. To overwrite, use --force", args[1])
-		}
-		pages, err := api.ParsePageSelection("")
-		if err != nil {
-			log.Fatalf("error: %s", err)
-		}
-		err = api.AddTextWatermarksFile(
-			args[0],
-			args[1],
-			pages,
-			true,
-			"DRAFT",
-			"points:48, scale:1, op:0.2",
-			pdfcpu.NewDefaultConfiguration())
-		if err != nil {
-			log.Fatalf("error: %s", err)
+		nargs := len(args)
+
+		for i := 0; i < nargs; i++ {
+			_, err := os.Stat(args[i])
+			if err != nil {
+				log.Fatalf("inFile `%s` does not exist", args[i])
+			}
+			_, err = api.PageCountFile(args[i])
+			if err != nil {
+				log.Fatalf("error with inFile `%s`: %s", args[i], err)
+			}
+
+			newFilename := generateNewFilename(args[i], filenameSuffix)
+
+			_, err = os.Stat(newFilename)
+			if !Overwrite && err == nil {
+				log.Fatalf("outFile `%s` already exists. To overwrite, use --force", newFilename)
+			}
+
+			pages, err := api.ParsePageSelection("")
+			if err != nil {
+				log.Fatalf("error: %s", err)
+			}
+			err = api.AddTextWatermarksFile(
+				args[i],
+				newFilename,
+				pages,
+				true,
+				"DRAFT",
+				"points:48, scale:1, op:0.2",
+				pdfcpu.NewDefaultConfiguration())
+			if err != nil {
+				log.Fatalf("error: %s", err)
+			}
 		}
 	},
 }
@@ -74,4 +87,5 @@ func init() {
 	// is called directly, e.g.:
 	// draftCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	draftCmd.Flags().BoolVarP(&Overwrite, "force", "f", false, "overwrite the output file (default: error on existing output file)")
+	draftCmd.Flags().StringVar(&filenameSuffix, "suffix", "-DRAFT", "output filename suffix")
 }
