@@ -26,7 +26,6 @@ import (
 	"github.com/kjinho/pdftool/src/utils"
 )
 
-var overwrite bool
 var prefix string
 var separator string
 var buffer int
@@ -52,12 +51,6 @@ starting with ABCD_0000000101 on the first page of the PDF.
   `,
 	Args: cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		// i, err := strconv.ParseInt(args[2], 10, 64)
-		// if err != nil {
-		// 	log.Fatalf("argument `%s` is not an integer\nError: %s", args[2], err)
-		// } else if i < 0 {
-		// 	log.Fatalf("starting number `%d` is not a positive integer", i)
-		// }
 		_, err := os.Stat(args[0])
 		if err != nil {
 			log.Fatalf("inFile `%s` does not exist", args[0])
@@ -67,7 +60,7 @@ starting with ABCD_0000000101 on the first page of the PDF.
 			log.Fatalf("error with inFile `%s`: %s", args[0], err)
 		}
 		_, err = os.Stat(args[1])
-		if !overwrite && err == nil {
+		if !Overwrite && err == nil {
 			log.Fatalf("outFile `%s` already exists. To overwrite, use --force", args[1])
 		}
 		fmtString := utils.GenerateFmtString(prefix, separator, buffer)
@@ -96,9 +89,9 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// batesCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	batesCmd.Flags().BoolVarP(&overwrite, "force", "f", false, "overwrite the output file (default: error on existing output file)")
 	batesCmd.Flags().StringVarP(&prefix, "prefix", "p", "Bates", "bates numbering prefix")
 	batesCmd.Flags().StringVarP(&separator, "separator", "s", "-", "separator")
 	batesCmd.Flags().IntVarP(&buffer, "width", "w", 10, "number of characters for number")
 	batesCmd.Flags().Int64VarP(&startNo, "number", "n", 1, "number to start on")
+	batesCmd.Flags().BoolVarP(&Overwrite, "force", "f", false, "overwrite the output file (default: error on existing output file)")
 }

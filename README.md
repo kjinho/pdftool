@@ -16,6 +16,7 @@ are helpful for lawyers that work with PDFs.
 Available Commands:
 
     bates       Bates stamp PDF files
+    draft       Add a `DRAFT` watermark
     help        Help about any command
 
 Flags:

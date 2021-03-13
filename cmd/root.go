@@ -27,6 +27,9 @@ import (
 
 var cfgFile string
 
+// Overwrite contains the flag for --force
+var Overwrite bool
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "pdftool",
