@@ -40,12 +40,15 @@ func BatesStamp(inFile string, outFile string, fmtString string, startno int64) 
 		points := 12
 		pos := "br"
 		rot := 0
-		ma := "5"
+		ma := "2"
 		fillc := "#000000"
-		offset := "-10 0"
+		offset := "-5 5"
 		scale := "1 abs"
+		bgcolor := "#ffffff"
+		opacity := "1"
+		border := "1 #000000"
 		desc := fmt.Sprintf(
-			"font:%s, points:%d, scale:%s, pos:%s, rot:%d, ma:%s, fillc:%s, offset:%s",
+			"font:%s, points:%d, scale:%s, pos:%s, rot:%d, ma:%s, fillc:%s, offset:%s, bgcolor:%s, op:%s, border:%s",
 			fontName,
 			points,
 			scale,
@@ -54,6 +57,9 @@ func BatesStamp(inFile string, outFile string, fmtString string, startno int64) 
 			ma,
 			fillc,
 			offset,
+			bgcolor,
+			opacity,
+			border,
 		)
 
 		wm, err := api.TextWatermark(text, desc, true, false, pdfcpu.POINTS)
