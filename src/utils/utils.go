@@ -19,10 +19,73 @@ package utils
 
 import (
 	"fmt"
+	"io"
+	"log"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
 )
+
+// BatesStampRS adds a bates stamp to each page of rs and writes to w
+func BatesStampRS(rs io.ReadSeeker, w io.Writer, fmtString string, startno int64) error {
+	_, err := rs.Seek(0, io.SeekStart)
+	if err != nil {
+		log.Printf("Error seeking to beginning of file\n%s", err)
+		return err
+	}
+
+	pageCount, err := api.PageCount(rs, nil)
+	if err != nil {
+		return err
+	}
+	m := map[int]*pdfcpu.Watermark{}
+
+	for i := 0; i < pageCount; i++ {
+		text := fmt.Sprintf(fmtString, startno+int64(i))
+		fontName := "Helvetica"
+		points := 12
+		pos := "br"
+		rot := 0
+		ma := "2"
+		fillc := "#000000"
+		offset := "-5 5"
+		scale := "1 abs"
+		bgcolor := "#ffffff"
+		opacity := "1"
+		border := "1 #000000"
+		desc := fmt.Sprintf(
+			"font:%s, points:%d, scale:%s, pos:%s, rot:%d, ma:%s, fillc:%s, offset:%s, bgcolor:%s, op:%s, border:%s",
+			fontName,
+			points,
+			scale,
+			pos,
+			rot,
+			ma,
+			fillc,
+			offset,
+			bgcolor,
+			opacity,
+			border,
+		)
+
+		wm, err := api.TextWatermark(text, desc, true, false, pdfcpu.POINTS)
+		if err != nil {
+			return err
+		}
+		m[i+1] = wm // PDF page numbering starts at 1
+	}
+
+	_, err = rs.Seek(0, io.SeekStart)
+	if err != nil {
+		log.Printf("Error seeking to beginning of file\n%s", err)
+		return err
+	}
+
+	if err := api.AddWatermarksMap(rs, w, m, nil); err != nil {
+		return err
+	}
+	return nil
+}
 
 // BatesStamp adds a bates stamp to each page of inFile and writes to outFile
 func BatesStamp(inFile string, outFile string, fmtString string, startno int64) error {

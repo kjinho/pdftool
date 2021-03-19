@@ -79,7 +79,19 @@ be infile-ABCD_0000000101-ABCD_0000000110.pdf.
 				startBates,
 				stopBates,
 			)
-			utils.BatesStamp(args[i], newFilename, fmtString, xstartNo)
+
+			fOut, err := os.Create(newFilename)
+			if err != nil {
+				log.Fatalf("Error creating file `%s`\n%s\n", newFilename, err)
+			}
+			defer fOut.Close()
+			fIn, err := os.Open(args[i])
+			if err != nil {
+				log.Fatalf("Error opening file `%s`\n%s\n", args[i], err)
+			}
+			defer fIn.Close()
+			utils.BatesStampRS(fIn, fOut, fmtString, xstartNo)
+
 			xstartNo += int64(pageCount)
 		}
 	},
