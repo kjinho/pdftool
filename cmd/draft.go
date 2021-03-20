@@ -20,8 +20,9 @@ import (
 	"os"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
 	"github.com/spf13/cobra"
+
+	"github.com/kjinho/pdftool/src/utils"
 )
 
 var filenameSuffix string
@@ -55,21 +56,21 @@ By default, the output filename is given the suffix "-DRAFT"`,
 				log.Fatalf("outFile `%s` already exists. To overwrite, use --force", newFilename)
 			}
 
-			pages, err := api.ParsePageSelection("")
+			fOut, err := os.Create(newFilename)
 			if err != nil {
-				log.Fatalf("error: %s", err)
+				log.Fatalf("Error creating file `%s`\n%s\n", newFilename, err)
 			}
-			err = api.AddTextWatermarksFile(
-				args[i],
-				newFilename,
-				pages,
-				true,
-				"DRAFT",
-				"points:48, scale:1, op:0.2",
-				pdfcpu.NewDefaultConfiguration())
+			defer fOut.Close()
+			fIn, err := os.Open(args[i])
 			if err != nil {
-				log.Fatalf("error: %s", err)
+				log.Fatalf("Error opening file `%s`\n%s\n", args[i], err)
 			}
+			defer fIn.Close()
+			err = utils.DraftStampRS(fIn, fOut)
+			if err != nil {
+				log.Fatalf("Error stamping `%s`", args[i])
+			}
+
 		}
 	},
 }

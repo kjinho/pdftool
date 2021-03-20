@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>File upload demo</title>
+  </head>
+  <body>
+    <div>
+        <h2>Bates Stamp</h2>
+        <form
+        id="form"
+        enctype="multipart/form-data"
+        action="/bates"
+        method="POST"
+        >
+        <p>File:
+            <input class="input file-input" type="file" name="file" multiple />
+        </p>
+        <p>Prefix:
+            <input type="text" name="prefix" value="Bates" />
+        </p>
+        <p>Divider: 
+            <select name="divider">
+                <option value="-">-</option>
+                <option value="/">/</option>
+                <option value="">None</option>
+            </select>
+        </p>
+        <p>Number Width:
+            <input type="number" name="width" min="1" max="15" value="10" />
+        </p>
+        <p>Starting Number:
+            <input type="number" name="startno" min="1" value="1" />
+        </p>
+        <p>
+            <button class="button" type="submit">Submit</button>
+        </p>
+        </form>
+    </div>
+    <div>
+        <h2>Draft Stamp</h2>
+        <form
+        id="form"
+        enctype="multipart/form-data"
+        action="/draft"
+        method="POST"
+        >
+        <p>File:
+            <input class="input file-input" type="file" name="file" multiple />
+        </p>
+        <p>
+            <button class="button" type="submit">Submit</button>
+        </p>
+        </form>
+    </div>
+  </body>
+</html>
