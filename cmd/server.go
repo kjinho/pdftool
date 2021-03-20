@@ -32,6 +32,12 @@ import (
 //go:embed assets/index.html
 var indexFile string
 
+//go:embed assets/normalize.css
+var normalizeCSS string
+
+//go:embed assets/skeleton.css
+var skeletonCSS string
+
 var serverPort int
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 50 // 50MB
@@ -40,6 +46,16 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "text/html")
 	fmt.Fprint(w, indexFile)
 	//http.ServeFile(w, r, "assets/index.html")
+}
+
+func normalizeCSSHanlder(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/css")
+	fmt.Fprint(w, normalizeCSS)
+}
+
+func skeletonCSSHanlder(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/css")
+	fmt.Fprint(w, skeletonCSS)
 }
 
 func batesHandler(w http.ResponseWriter, r *http.Request) {
@@ -167,6 +183,8 @@ to disk, so there is a maximum file size of ` + fmt.Sprintf("%d", MAX_UPLOAD_SIZ
 		log.Printf("Starting server on http://%s:%d.\nPress ctrl-c to quit.\n", "localhost", serverPort)
 		mux := http.NewServeMux()
 		mux.HandleFunc("/", indexHandler)
+		mux.HandleFunc("/skeleton.css", skeletonCSSHanlder)
+		mux.HandleFunc("/normalize.css", normalizeCSSHanlder)
 		mux.HandleFunc("/bates", batesHandler)
 		mux.HandleFunc("/draft", draftHandler)
 

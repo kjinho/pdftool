@@ -1,59 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>File upload demo</title>
-  </head>
-  <body>
-    <div>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for HTML5 for Apple macOS version 5.6.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content=
+  "width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>pdftool</title><!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href=
+  "https://fonts.googleapis.com/css?family=Raleway:400,300,600"
+  rel="stylesheet" type="text/css"><!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="normalize.css">
+  <link rel="stylesheet" href="skeleton.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <h1>pdftool</h1>
+    </div>
+    <div class="row">
+      <div class="one-half column bordered">
         <h2>Bates Stamp</h2>
-        <form
-        id="form"
-        enctype="multipart/form-data"
-        action="/bates"
-        method="POST"
-        >
-        <p>File:
-            <input class="input file-input" type="file" name="file" multiple />
-        </p>
-        <p>Prefix:
-            <input type="text" name="prefix" value="Bates" />
-        </p>
-        <p>Divider: 
-            <select name="divider">
-                <option value="-">-</option>
-                <option value="/">/</option>
-                <option value="">None</option>
-            </select>
-        </p>
-        <p>Number Width:
-            <input type="number" name="width" min="1" max="15" value="10" />
-        </p>
-        <p>Starting Number:
-            <input type="number" name="startno" min="1" value="1" />
-        </p>
-        <p>
-            <button class="button" type="submit">Submit</button>
-        </p>
+        <form id="batesform" enctype="multipart/form-data" action=
+        "/bates" method="post" name="batesform">
+          <div class="row">
+            <label for="batesfile">File:</label> <input id=
+            "batesfile" class="input file-input" type="file" name=
+            "file" multiple>
+          </div>
+          <div class="row">
+            <div class="six columns">
+              <label for="prefix">Prefix:</label> <input id=
+              "prefix" type="text" name="prefix" value="Bates"
+              style="width: 15em;">
+            </div>
+            <div class="three columns">
+              <label for="divider">Divider:</label> <select name=
+              "divider" id="divider" style="width: 5em;">
+                <option value="-">
+                  -
+                </option>
+                <option value="/">
+                  /
+                </option>
+                <option value="">
+                  None
+                </option>
+              </select>
+            </div>
+            <div class="three columns">
+              <label for="width">Width:</label> <input id="width"
+              type="number" name="width" min="1" max="15" value=
+              "10" style="width: 5em;">
+            </div>
+            <div class="row">
+              <label for="startno">Starting Number:</label>
+              <input id="startno" type="number" name="startno" min=
+              "1" value="1">
+            </div>
+          </div>
+          <div class="row">
+            <button class="button-primary" type=
+            "submit">Submit</button>
+          </div>
         </form>
-    </div>
-    <div>
+      </div>
+      <div class="one-half column bordered">
         <h2>Draft Stamp</h2>
-        <form
-        id="form"
-        enctype="multipart/form-data"
-        action="/draft"
-        method="POST"
-        >
-        <p>File:
-            <input class="input file-input" type="file" name="file" multiple />
-        </p>
-        <p>
-            <button class="button" type="submit">Submit</button>
-        </p>
+        <form id="draftform" enctype="multipart/form-data" action=
+        "/draft" method="post" name="draftform">
+          <div class="row">
+            <label for="draftfile">File:</label> <input id=
+            "draftfile" class="input file-input" type="file" name=
+            "file" multiple>
+          </div>
+          <div class="row">
+            <button class="button-primary" type=
+            "submit">Submit</button>
+          </div>
         </form>
+      </div>
     </div>
-  </body>
+  </div>
+</body>
 </html>
