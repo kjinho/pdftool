@@ -25,7 +25,7 @@ import (
 	"github.com/kjinho/pdftool/src/utils"
 )
 
-var filenameSuffix string
+var copyFilenameSuffix string
 
 // draftCmd represents the draft command
 var copyCmd = &cobra.Command{
@@ -88,5 +88,5 @@ func init() {
 	// is called directly, e.g.:
 	// draftCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	draftCmd.Flags().BoolVarP(&Overwrite, "force", "f", false, "overwrite the output file (default: error on existing output file)")
-	draftCmd.Flags().StringVar(&filenameSuffix, "suffix", "-COPY", "output filename suffix")
+	draftCmd.Flags().StringVar(&copyFilenameSuffix, "suffix", "-COPY", "output filename suffix")
 }
