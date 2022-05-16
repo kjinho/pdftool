@@ -26,6 +26,7 @@ import (
 )
 
 var copyFilenameSuffix string
+var copyOverwrite bool
 
 // draftCmd represents the draft command
 var copyCmd = &cobra.Command{
@@ -52,7 +53,7 @@ By default, the output filename is given the suffix "-COPY"`,
 			newFilename := generateNewFilename(args[i], copyFilenameSuffix)
 
 			_, err = os.Stat(newFilename)
-			if !Overwrite && err == nil {
+			if !copyOverwrite && err == nil {
 				log.Fatalf("outFile `%s` already exists. To overwrite, use --force", newFilename)
 			}
 
@@ -87,6 +88,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// draftCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	draftCmd.Flags().BoolVarP(&Overwrite, "force", "f", false, "overwrite the output file (default: error on existing output file)")
+	draftCmd.Flags().BoolVarP(&copyOverwrite, "force", "f", false, "overwrite the output file (default: error on existing output file)")
 	draftCmd.Flags().StringVar(&copyFilenameSuffix, "suffix", "-COPY", "output filename suffix")
 }
