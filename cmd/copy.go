@@ -49,7 +49,7 @@ By default, the output filename is given the suffix "-COPY"`,
 				log.Fatalf("error with inFile `%s`: %s", args[i], err)
 			}
 
-			newFilename := generateNewFilename(args[i], filenameSuffix)
+			newFilename := generateNewFilename(args[i], copyFilenameSuffix)
 
 			_, err = os.Stat(newFilename)
 			if !Overwrite && err == nil {
