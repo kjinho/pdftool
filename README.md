@@ -16,6 +16,7 @@ are helpful for lawyers that work with PDFs.
 Available Commands:
 
     bates       Bates stamp PDF files
+    copy        Add a `COPY` watermark
     draft       Add a `DRAFT` watermark
     help        Help about any command
     server      an HTTP service to process PDF files
