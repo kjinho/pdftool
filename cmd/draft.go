@@ -25,7 +25,7 @@ import (
 	"github.com/kjinho/pdftool/src/utils"
 )
 
-var filenameSuffix string
+var draftFilenameSuffix string
 
 // draftCmd represents the draft command
 var draftCmd = &cobra.Command{
@@ -49,7 +49,7 @@ By default, the output filename is given the suffix "-DRAFT"`,
 				log.Fatalf("error with inFile `%s`: %s", args[i], err)
 			}
 
-			newFilename := generateNewFilename(args[i], filenameSuffix)
+			newFilename := generateNewFilename(args[i], draftFilenameSuffix)
 
 			_, err = os.Stat(newFilename)
 			if !Overwrite && err == nil {
@@ -88,5 +88,5 @@ func init() {
 	// is called directly, e.g.:
 	// draftCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	draftCmd.Flags().BoolVarP(&Overwrite, "force", "f", false, "overwrite the output file (default: error on existing output file)")
-	draftCmd.Flags().StringVar(&filenameSuffix, "suffix", "-DRAFT", "output filename suffix")
+	draftCmd.Flags().StringVar(&draftFilenameSuffix, "suffix", "-DRAFT", "output filename suffix")
 }

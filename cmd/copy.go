@@ -25,7 +25,7 @@ import (
 	"github.com/kjinho/pdftool/src/utils"
 )
 
-var copyFilenameSuffix string
+var filenameSuffix string
 
 // draftCmd represents the draft command
 var copyCmd = &cobra.Command{
@@ -49,7 +49,7 @@ By default, the output filename is given the suffix "-COPY"`,
 				log.Fatalf("error with inFile `%s`: %s", args[i], err)
 			}
 
-			newFilename := generateNewFilename(args[i], copyFilenameSuffix)
+			newFilename := generateNewFilename(args[i], filenameSuffix)
 
 			_, err = os.Stat(newFilename)
 			if !Overwrite && err == nil {
@@ -87,6 +87,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// draftCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	draftCmd.Flags().BoolVarP(&Overwrite, "force", "f", false, "overwrite the output file (default: error on existing output file)")
-	draftCmd.Flags().StringVar(&copyFilenameSuffix, "suffix", "-COPY", "output filename suffix")
+	copyCmd.Flags().BoolVarP(&Overwrite, "force", "f", false, "overwrite the output file (default: error on existing output file)")
+	copyCmd.Flags().StringVar(&filenameSuffix, "suffix", "-COPY", "output filename suffix")
 }

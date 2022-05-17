@@ -30,6 +30,11 @@ var cfgFile string
 // Overwrite contains the flag for --force
 var Overwrite bool
 
+// FilenameSuffix contains the filename suffix (used in Copy and Draft)
+//var FilenameSuffix string
+
+var VersionNumber string = "development"
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "pdftool",
@@ -44,8 +49,8 @@ are helpful for lawyers that work with PDFs.`,
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
-	cobra.CheckErr(rootCmd.Execute())
+func Execute() error {
+	return rootCmd.Execute()
 }
 
 func init() {
@@ -56,7 +61,7 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.pdftool.yaml)")
-
+	
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

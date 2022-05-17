@@ -9,6 +9,11 @@ are helpful for lawyers that work with PDFs.
 
     go install github.com/kjinho/pdftool@latest
 
+If you wish to set the version number in the binary to 'v0.1.2', for
+example, build from source with the following linker flags:
+
+    go build -ldflags="-X 'github.com/kjinho/pdftool/cmd.VersionNumber=v0.1.2'"
+
 ## Usage
 
     pdftool [command]
@@ -16,6 +21,8 @@ are helpful for lawyers that work with PDFs.
 Available Commands:
 
     bates       Bates stamp PDF files
+    completion  Generate the autocompletion script for the specified shell
+    copy        Add a `COPY` watermark
     draft       Add a `DRAFT` watermark
     help        Help about any command
     server      an HTTP service to process PDF files
