@@ -9,10 +9,13 @@ are helpful for lawyers that work with PDFs.
 
     go install github.com/kjinho/pdftool@latest
 
-If you wish to set the version number in the binary to 'v0.1.2', for
-example, build from source with the following linker flags:
+Alternatively, you may use the provided Makefile to compile and install
+pdftool. Remember to set the variables at the top of the Makefile
+appropriately first (default is to install to `~/.local/bin`).
 
-    go build -ldflags="-X 'github.com/kjinho/pdftool/cmd.VersionNumber=v0.1.2'"
+    git clone https://github.com/kjinho/pdftool
+    cd pdftool
+    make install 
 
 ## Usage
 
