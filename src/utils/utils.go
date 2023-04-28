@@ -7,7 +7,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,6 +24,8 @@ import (
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 )
 
 // DraftStampRS adds a DRAFT watermark to each page of rs and writes to w
@@ -32,7 +34,7 @@ func DraftStampRS(rs io.ReadSeeker, w io.Writer) error {
 	if err != nil {
 		log.Fatalf("error: %s", err)
 	}
-	wm, err := pdfcpu.ParseTextWatermarkDetails("DRAFT", "points:48, scale:1, op:0.2", true, pdfcpu.POINTS)
+	wm, err := pdfcpu.ParseTextWatermarkDetails("DRAFT", "points:48, scale:1, op:0.2", true, types.POINTS)
 	if err != nil {
 		log.Printf("Error creating watermark: %s", err)
 		return err
@@ -50,7 +52,7 @@ func CopyStampRS(rs io.ReadSeeker, w io.Writer) error {
 	if err != nil {
 		log.Fatalf("error: %s", err)
 	}
-	wm, err := pdfcpu.ParseTextWatermarkDetails("COPY", "points:48, scale:1, op:0.2", true, pdfcpu.POINTS)
+	wm, err := pdfcpu.ParseTextWatermarkDetails("COPY", "points:48, scale:1, op:0.2", true, types.POINTS)
 	if err != nil {
 		log.Printf("Error creating watermark: %s", err)
 		return err
@@ -74,7 +76,7 @@ func BatesStampRS(rs io.ReadSeeker, w io.Writer, fmtString string, startno int64
 	if err != nil {
 		return err
 	}
-	m := map[int]*pdfcpu.Watermark{}
+	m := map[int]*model.Watermark{}
 
 	for i := 0; i < pageCount; i++ {
 		text := fmt.Sprintf(fmtString, startno+int64(i))
@@ -84,7 +86,7 @@ func BatesStampRS(rs io.ReadSeeker, w io.Writer, fmtString string, startno int64
 		rot := 0
 		ma := "2"
 		fillc := "#000000"
-		offset := "-5 5"
+		offset := "-20 5"
 		scale := "1 abs"
 		bgcolor := "#ffffff"
 		opacity := "1"
@@ -104,7 +106,7 @@ func BatesStampRS(rs io.ReadSeeker, w io.Writer, fmtString string, startno int64
 			border,
 		)
 
-		wm, err := api.TextWatermark(text, desc, true, false, pdfcpu.POINTS)
+		wm, err := api.TextWatermark(text, desc, true, false, types.POINTS)
 		if err != nil {
 			return err
 		}
@@ -131,7 +133,7 @@ func BatesStamp(inFile string, outFile string, fmtString string, startno int64) 
 		return err
 	}
 
-	m := map[int]*pdfcpu.Watermark{}
+	m := map[int]*model.Watermark{}
 
 	for i := 0; i < pageCount; i++ {
 		text := fmt.Sprintf(fmtString, startno+int64(i))
@@ -161,7 +163,7 @@ func BatesStamp(inFile string, outFile string, fmtString string, startno int64) 
 			border,
 		)
 
-		wm, err := api.TextWatermark(text, desc, true, false, pdfcpu.POINTS)
+		wm, err := api.TextWatermark(text, desc, true, false, types.POINTS)
 		if err != nil {
 			return err
 		}

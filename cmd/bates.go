@@ -111,7 +111,7 @@ func init() {
 	// batesCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	batesCmd.Flags().StringVarP(&prefix, "prefix", "p", "Bates", "bates numbering prefix")
 	batesCmd.Flags().StringVarP(&separator, "separator", "s", "-", "separator")
-	batesCmd.Flags().IntVarP(&buffer, "width", "w", 10, "number of characters for number")
+	batesCmd.Flags().IntVarP(&buffer, "width", "w", 8, "number of characters for number")
 	batesCmd.Flags().Int64VarP(&startNo, "number", "n", 1, "number to start on")
 	batesCmd.Flags().BoolVarP(&Overwrite, "force", "f", false, "overwrite the output file (default: error on existing output file)")
 }
