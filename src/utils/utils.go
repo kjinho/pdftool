@@ -28,6 +28,24 @@ import (
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 )
 
+// ConfidentialStampRS adds a CONFIDENTIAL watermark to each page of rs and writes to w
+func ConfidentialStampRS(rs io.ReadSeeker, w io.Writer) error {
+	pages, err := api.ParsePageSelection("") // select all pages
+	if err != nil {
+		log.Fatalf("error: %s", err)
+	}
+	wm, err := pdfcpu.ParseTextWatermarkDetails("CONFIDENTIAL", "points:48, scale:1, op:0.2", true, types.POINTS)
+	if err != nil {
+		log.Printf("Error creating watermark: %s", err)
+		return err
+	}
+	err = api.AddWatermarks(rs, w, pages, wm, nil)
+	if err != nil {
+		log.Fatalf("error: %s", err)
+	}
+	return nil
+}
+
 // DraftStampRS adds a DRAFT watermark to each page of rs and writes to w
 func DraftStampRS(rs io.ReadSeeker, w io.Writer) error {
 	pages, err := api.ParsePageSelection("") // select all pages
